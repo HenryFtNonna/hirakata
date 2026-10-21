@@ -20,7 +20,7 @@ export default function Profil() {
   };
 
   return (
-    <div className="py-4 px-4 max-w-md mx-auto space-y-4">
+    <div className="pt-7 pb-6 px-4 max-w-md mx-auto space-y-4">
       {/* Header Profil */}
       <div className="text-center">
         <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center font-jp text-2xl font-black mx-auto soft-shadow mb-2">
@@ -104,4 +104,3 @@ export default function Profil() {
     </div>
   );
 }
-

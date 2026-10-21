@@ -79,10 +79,10 @@ export default function HeroSection() {
   ];
 
   return (
-    <div className="min-h-full px-4 pt-2 pb-6 max-w-md mx-auto flex flex-col justify-between space-y-4 sm:space-y-5">
+    <div className="min-h-[calc(100dvh-5.5rem)] flex flex-col justify-around max-w-md mx-auto px-4 pt-safe pt-4 sm:pt-6 pb-6 sm:pb-8 gap-4 sm:gap-5 w-full">
       {/* 1. Header: Centered HiraKata Title (Wireframe) */}
-      <div className="flex items-center justify-between pt-safe pt-1">
-        <div className="w-8" /> {/* Spacer to ensure title remains mathematically centered */}
+      <div className="flex items-center justify-between pt-2 pb-1">
+        <div className="w-9" /> {/* Spacer untuk memastikan judul tetap simetris di tengah */}
 
         <div className="text-center">
           <div className="inline-flex items-center justify-center gap-1.5">
@@ -93,6 +93,7 @@ export default function HeroSection() {
               N5
             </span>
           </div>
+          <p className="text-[11px] text-slate-400 font-semibold tracking-wide">Japanese Learning Hub</p>
         </div>
 
         {/* Quick Audio Mute Toggle */}
@@ -100,7 +101,7 @@ export default function HeroSection() {
           onClick={handleToggleSound}
           title={audioMuted ? 'Nyalakan Efek Suara' : 'Bisukan Efek Suara'}
           aria-label="Toggle Sound"
-          className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
+          className={`w-9 h-9 rounded-2xl border flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
             audioMuted
               ? 'bg-rose-50 border-rose-200 text-rose-600'
               : 'bg-white border-slate-200 text-emerald-600 soft-shadow-sm'
@@ -115,7 +116,7 @@ export default function HeroSection() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="relative overflow-hidden rounded-3xl p-5 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 text-white soft-shadow-lg text-center"
+        className="relative overflow-hidden rounded-3xl p-5 sm:p-6 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 text-white soft-shadow-lg text-center"
       >
         {/* Soft Background Accents */}
         <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
@@ -143,7 +144,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* 3. 3x2 Grid of 6 Squircle Buttons (Wireframe) */}
-      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
         {modules.map((item) => (
           <motion.button
             key={item.id}
