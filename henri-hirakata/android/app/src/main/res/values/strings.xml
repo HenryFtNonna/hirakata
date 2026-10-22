@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HenHan Go</string>
+    <string name="title_activity_main">HenHan Go</string>
+    <string name="package_name">com.hirakata.app</string>
+    <string name="custom_url_scheme">com.hirakata.app</string>
+</resources>

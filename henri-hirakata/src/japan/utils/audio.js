@@ -1,7 +1,10 @@
-// Web Audio API Synthesizer & Speech Synthesis Utility (No external asset dependency)
+// Web Audio API Synthesizer & Speech Synthesis Utility (Multi-layer Native & Web Audio)
+import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import { Capacitor } from '@capacitor/core';
 
 let audioCtx = null;
 let isMuted = false;
+let currentSpeechAudio = null;
 
 function getAudioContext() {
   if (typeof window === 'undefined') return null;
@@ -19,6 +22,10 @@ function getAudioContext() {
 
 export function setMuted(muted) {
   isMuted = muted;
+  if (muted && currentSpeechAudio) {
+    currentSpeechAudio.pause();
+    currentSpeechAudio.currentTime = 0;
+  }
 }
 
 export function getMuted() {
@@ -155,19 +162,20 @@ export function playFanfareSound() {
 }
 
 /**
- * Mengucapkan teks karakter Jepang menggunakan Web Speech API
+ * Fallback Web Speech API lokal jika audio stream online offline
  */
-export function speakJapanese(text) {
+function speakWithSpeechSynthesis(text) {
   if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
   try {
-    window.speechSynthesis.cancel(); // batalkan suara sebelumnya
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'ja-JP';
-    utterance.rate = 0.85; // kecepatan sedikit lebih lambat untuk pembelajaran yang jelas
+    utterance.rate = 0.85;
     utterance.pitch = 1.05;
 
-    // Cari voice Jepang jika ada
     const voices = window.speechSynthesis.getVoices();
     const jaVoice = voices.find((v) => v.lang.startsWith('ja') || v.lang === 'ja_JP');
     if (jaVoice) {
@@ -176,7 +184,64 @@ export function speakJapanese(text) {
 
     window.speechSynthesis.speak(utterance);
   } catch {
-    // Abaikan jika speech synthesis diblokir browser
+    // Abaikan error jika synthesizer browser tidak tersedia
   }
 }
 
+/**
+ * Fallback Native TTS Capacitor untuk Android / iOS
+ */
+async function speakWithNativeTts(text) {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      await TextToSpeech.stop();
+      await TextToSpeech.speak({
+        text,
+        lang: 'ja-JP',
+        rate: 0.9,
+        pitch: 1.0,
+        volume: 1.0,
+        category: 'ambient',
+      });
+      return true;
+    } catch {
+      // Fallback ke Web Speech jika plugin native belum siap
+    }
+  }
+  speakWithSpeechSynthesis(text);
+  return false;
+}
+
+/**
+ * Mengucapkan karakter/kata Jepang menggunakan suara penutur cewek Jepang asli
+ * Berjalan optimal di Android Native (Capacitor), WebView, dan Desktop Web
+ */
+export function speakJapanese(text) {
+  if (isMuted || !text || typeof window === 'undefined') return;
+
+  const cleanText = text.trim();
+  if (!cleanText) return;
+
+  // 1. Prioritas Utama: Audio Stream Penutur Asli Cewek Jepang (Youdao Audio Engine)
+  // Tidak memblokir localhost/Capacitor WebView (bebas 404 / CORS)
+  try {
+    if (currentSpeechAudio) {
+      currentSpeechAudio.pause();
+      currentSpeechAudio.currentTime = 0;
+    }
+
+    const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanText)}&le=jap`;
+    const audio = new Audio(audioUrl);
+    currentSpeechAudio = audio;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // 2. Fallback: Native Text-to-Speech plugin di Android atau Web Speech
+        speakWithNativeTts(cleanText);
+      });
+    }
+  } catch {
+    speakWithNativeTts(cleanText);
+  }
+}

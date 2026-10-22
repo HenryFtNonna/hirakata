@@ -46,7 +46,7 @@ export const HIRAGANA_DATA = [
 
   // Baris H
   { id: 'ha', char: 'は', romaji: 'ha', alts: [], type: 'seion', row: 'h', example: 'はな (Hana / Bunga)' },
-  { id: 'hi', char: 'hi', romaji: 'hi', alts: [], type: 'seion', row: 'h', example: 'ひと (Hito / Orang)' },
+  { id: 'hi', char: 'ひ', romaji: 'hi', alts: [], type: 'seion', row: 'h', example: 'ひと (Hito / Orang)' },
   { id: 'fu', char: 'ふ', romaji: 'fu', alts: ['hu'], type: 'seion', row: 'h', example: 'ふゆ (Fuyu / Musim Dingin)' },
   { id: 'he', char: 'へ', romaji: 'he', alts: [], type: 'seion', row: 'h', example: 'へや (Heya / Kamar)' },
   { id: 'ho', char: 'ほ', romaji: 'ho', alts: [], type: 'seion', row: 'h', example: 'ほん (Hon / Buku)' },
