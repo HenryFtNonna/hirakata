@@ -4,6 +4,7 @@ import MobileHeader from './components/MobileHeader';
 import BottomNav from './components/BottomNav';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import BackButtonHandler from './components/BackButtonHandler';
 
 // Feature Components
 import HeroSection from './herosection/HeroSection';
@@ -20,6 +21,9 @@ export default function JapanLearningHub() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      {/* Capacitor Android/iOS Native Hardware & Gesture Back Button Handler */}
+      <BackButtonHandler />
+
       <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col selection:bg-indigo-500 selection:text-white relative">
         {/* Mobile Header (Shown on mobile for subpages) */}
         <div className="block md:hidden">
@@ -29,7 +33,7 @@ export default function JapanLearningHub() {
         {/* Desktop Navbar (Wide screen web only) */}
         <Navbar />
 
-        {/* Dynamic Main Route Content (Added bottom padding on mobile for BottomNav) */}
+        {/* Dynamic Main Route Content */}
         <main className="flex-1 pb-20 md:pb-10">
           <Routes>
             <Route path="/" element={<HeroSection />} />

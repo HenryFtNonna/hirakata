@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
   Volume2,
-  Sparkles,
   RotateCcw,
   BookOpen,
   Gamepad2,
@@ -94,10 +93,9 @@ export default function Kosakata() {
 
       playCorrectSound(nextStreak);
       confetti({
-        particleCount: 50,
-        spread: 60,
+        particleCount: 40,
+        spread: 50,
         origin: { y: 0.65 },
-        colors: ['#8b5cf6', '#10b981', '#f59e0b', '#3b82f6'],
       });
 
       setTimeout(() => {
@@ -145,34 +143,27 @@ export default function Kosakata() {
   const progressPercent = deck.length > 0 ? Math.round(((currentIndex + 1) / deck.length) * 100) : 0;
 
   return (
-    <section className="py-6 sm:py-12 px-3 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-      {/* Header Kosakata */}
-      <div className="text-center mb-6 sm:mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-100 text-purple-700 text-xs font-semibold mb-2.5 soft-shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-purple-500 animate-pulse" />
-          <span>Modul Kosakata JLPT N5 • 80 Kosakata Penting</span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight">
-          Kosakata & Frasa N5
-        </h1>
-        <p className="mt-1.5 text-slate-500 text-xs sm:text-base max-w-xl mx-auto px-2">
-          Kuasai kosakata salam, kata kerja, kata sifat, dan ungkapan percakapan sehari-hari bahasa Jepang untuk persiapan ujian N5.
-        </p>
+    <section id="kosakata-section" className="py-2 px-3 sm:px-4 max-w-md mx-auto space-y-3 sm:space-y-3.5">
+      {/* ================= JUDUL UTAMA ================= */}
+      <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight text-center pt-1">
+        Kosakata & Frasa N5
+      </h2>
 
-        {/* Tab Switcher */}
-        <div className="mt-4 sm:mt-6 inline-flex p-1 rounded-2xl bg-slate-200/70 backdrop-blur-sm soft-inner-shadow">
+      {/* ================= 1. PILIHAN MODE QUIZ DAN TABEL (Paling Atas) ================= */}
+      <div className="flex flex-col items-center gap-2">
+        <div className="inline-flex p-1 rounded-2xl bg-slate-200/80 backdrop-blur-sm soft-inner-shadow">
           <button
             onClick={() => {
               playPopSound();
               setActiveTab('quiz');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
               activeTab === 'quiz'
-                ? 'bg-white text-purple-600 shadow-sm'
+                ? 'bg-white text-rose-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Gamepad2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Gamepad2 className="w-3.5 h-3.5" />
             <span>Mode Kuis</span>
           </button>
           <button
@@ -180,232 +171,244 @@ export default function Kosakata() {
               playPopSound();
               setActiveTab('list');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
               activeTab === 'list'
-                ? 'bg-white text-purple-600 shadow-sm'
+                ? 'bg-white text-rose-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <BookOpen className="w-3.5 h-3.5" />
             <span>Daftar 80 Kosakata</span>
           </button>
         </div>
+
+        {/* Progress Bar Mini */}
+        {activeTab === 'quiz' && (
+          <div className="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden soft-inner-shadow">
+            <div
+              className="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-400 rounded-full transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        )}
       </div>
 
       {activeTab === 'quiz' ? (
-        <div className="space-y-4 sm:space-y-6">
-          {/* Category Filter */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1 px-1 justify-start sm:justify-center">
-            {KOSAKATA_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  playPopSound();
-                  handleSelectCategory(cat.id);
-                }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  selectedCat === cat.id
-                    ? 'bg-purple-600 text-white soft-shadow-sm'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <span>{cat.name}</span>
-                <span className="ml-1 opacity-70">({cat.count})</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Stats Bar */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-4 max-w-xl mx-auto">
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px] sm:text-xs">
-                <Flame className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${streak >= 3 ? 'animate-bounce text-orange-500' : ''}`} />
-                <span>Streak</span>
-              </div>
-              <span className="text-base sm:text-lg font-black text-slate-800">{streak}</span>
-            </div>
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-purple-600 font-extrabold text-[10px] sm:text-xs">
-                <Trophy className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                <span>Skor</span>
-              </div>
-              <span className="text-base sm:text-lg font-black text-slate-800">{score}</span>
-            </div>
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-emerald-500 font-extrabold text-[10px] sm:text-xs">
-                <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                <span>Akurasi</span>
-              </div>
-              <span className="text-base sm:text-lg font-black text-slate-800">{accuracy}%</span>
-            </div>
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-400">Progres</span>
-              <span className="text-base sm:text-lg font-black text-slate-800">
-                {deck.length > 0 ? `${currentIndex + 1}/${deck.length}` : '0/0'}
-              </span>
-            </div>
-          </div>
-
-          {/* Progress */}
-          <div className="max-w-xl mx-auto px-1">
-            <div className="w-full bg-slate-200/70 h-2 sm:h-2.5 rounded-full overflow-hidden p-0.5 soft-inner-shadow">
-              <div
-                className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Quiz Card */}
+        <div className="space-y-3 sm:space-y-3.5">
+          {/* ================= 2. CARD QUIZ (Di Bawah Mode Agar Tetap Terlihat Saat Keyboard Terbuka) ================= */}
           {!quizFinished && currentCard ? (
-            <div className="max-w-md mx-auto">
-              <motion.div
-                key={currentCard.id}
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className={`relative rounded-3xl p-5 sm:p-8 border-2 transition-all ${
-                  quizStatus === 'correct'
-                    ? 'bg-emerald-50 border-emerald-400 soft-shadow-success'
-                    : quizStatus === 'wrong'
-                    ? 'bg-rose-50 border-rose-400 soft-shadow-error'
-                    : 'bg-white/95 border-white soft-shadow-lg'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-slate-100 text-slate-600">
-                    JLPT N5 Kosakata
-                  </span>
-                  <button
-                    onClick={() => speakJapanese(currentCard.kana)}
-                    title="Dengarkan pengucapan"
-                    className="p-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 transition-colors cursor-pointer active:scale-90"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="my-4 sm:my-6 text-center select-none">
-                  <span
-                    onClick={() => speakJapanese(currentCard.kana)}
-                    className="font-jp text-3xl sm:text-5xl font-black text-slate-800 hover:text-purple-600 transition-colors cursor-pointer inline-block"
-                  >
-                    {currentCard.kana}
-                  </span>
-                  {currentCard.kanji !== '-' && (
-                    <span className="block text-xs sm:text-sm text-slate-400 mt-1 font-jp">
-                      Kanji: {currentCard.kanji}
-                    </span>
-                  )}
-                  <p className="text-xs text-purple-600 font-bold mt-1 tracking-wider">
-                    {currentCard.romaji}
-                  </p>
-                </div>
-
-                {/* Banner Status */}
-                <div className="min-h-[2.25rem] flex items-center justify-center mb-3">
-                  {quizStatus === 'correct' && (
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500 text-white font-extrabold text-xs sm:text-sm"
-                    >
-                      <Check className="w-4 h-4 stroke-[3]" />
-                      <span>Benar! Arti: {currentCard.arti} 🎉</span>
-                    </motion.div>
-                  )}
-                  {quizStatus === 'wrong' && (
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500 text-white font-extrabold text-xs sm:text-sm"
-                    >
-                      <XCircle className="w-4 h-4" />
-                      <span>Kurang Tepat! Jawaban: {currentCard.arti}</span>
-                    </motion.div>
-                  )}
-                  {quizStatus === 'idle' && (
-                    <span className="text-xs font-semibold text-slate-500">
-                      Pilihlah arti kata yang tepat:
-                    </span>
-                  )}
-                </div>
-
-                {/* Options */}
-                <div className="grid grid-cols-1 gap-2">
-                  {quizOptions.map((opt, idx) => {
-                    const isSelected = selectedOption === idx;
-                    let btnStyle = 'bg-slate-50 hover:bg-purple-50 border-slate-200 text-slate-700 hover:border-purple-300';
-                    if (quizStatus !== 'idle') {
-                      if (opt.isCorrect) {
-                        btnStyle = 'bg-emerald-500 text-white border-emerald-500 shadow-md';
-                      } else if (isSelected && !opt.isCorrect) {
-                        btnStyle = 'bg-rose-500 text-white border-rose-500 shadow-md';
-                      } else {
-                        btnStyle = 'bg-slate-100 text-slate-400 border-slate-200 opacity-60';
-                      }
+            <motion.div
+              key={currentCard.id}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={
+                quizStatus === 'wrong'
+                  ? {
+                      scale: 1,
+                      opacity: 1,
+                      x: [-12, 12, -8, 8, -4, 4, 0],
+                      transition: { duration: 0.4 },
                     }
+                  : { scale: 1, opacity: 1 }
+              }
+              className={`relative rounded-3xl p-4 sm:p-5 border-2 transition-all ${
+                quizStatus === 'correct'
+                  ? 'bg-emerald-50/95 border-emerald-400 soft-shadow-success'
+                  : quizStatus === 'wrong'
+                  ? 'bg-rose-50/95 border-rose-400 soft-shadow-error'
+                  : 'bg-white/95 border-slate-100 soft-shadow-md'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-600">
+                  JLPT N5 Kosakata
+                </span>
+                <button
+                  onClick={() => speakJapanese(currentCard.kana)}
+                  title="Dengarkan pengucapan"
+                  className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 transition-colors cursor-pointer active:scale-90"
+                >
+                  <Volume2 className="w-4 h-4" />
+                </button>
+              </div>
 
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => handleAnswer(opt, idx)}
-                        disabled={isTransitioning}
-                        className={`p-3 sm:p-3.5 rounded-2xl font-bold text-xs sm:text-sm text-left border-2 transition-all flex items-center justify-between cursor-pointer active:scale-98 ${btnStyle}`}
-                      >
-                        <span>{opt.text}</span>
-                        {quizStatus !== 'idle' && opt.isCorrect && (
-                          <Check className="w-4 h-4 stroke-[3]" />
-                        )}
-                        {quizStatus !== 'idle' && isSelected && !opt.isCorrect && (
-                          <X className="w-4 h-4 stroke-[3]" />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="my-2 sm:my-3 text-center select-none">
+                <span
+                  onClick={() => speakJapanese(currentCard.kana)}
+                  className="font-jp text-3xl sm:text-4xl font-black text-slate-800 hover:text-rose-600 transition-colors cursor-pointer inline-block"
+                >
+                  {currentCard.kana}
+                </span>
+                {currentCard.kanji !== '-' && (
+                  <span className="block text-xs text-slate-400 mt-0.5 font-jp">
+                    Kanji: {currentCard.kanji}
+                  </span>
+                )}
+                <p className="text-xs text-[#EA4A30] font-bold mt-1 tracking-wider">
+                  {currentCard.romaji}
+                </p>
+              </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs text-slate-400">
-                  <span>Audio penutur asli Jepang</span>
-                  <button
-                    onClick={() => initQuiz()}
-                    className="flex items-center gap-1 text-slate-500 hover:text-purple-600 transition-colors cursor-pointer"
+              {/* Banner Status */}
+              <div className="min-h-[1.75rem] flex items-center justify-center mb-2.5">
+                {quizStatus === 'correct' && (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-xs"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Acak Ulang</span>
-                  </button>
-                </div>
-              </motion.div>
-            </div>
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    <span>Benar! Arti: {currentCard.arti} 🎉</span>
+                  </motion.div>
+                )}
+                {quizStatus === 'wrong' && (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-xs"
+                  >
+                    <XCircle className="w-3.5 h-3.5" />
+                    <span>Kurang Tepat! Jawaban: {currentCard.arti}</span>
+                  </motion.div>
+                )}
+                {quizStatus === 'idle' && (
+                  <span className="text-[11px] font-semibold text-slate-500">
+                    Pilihlah arti kata yang tepat:
+                  </span>
+                )}
+              </div>
+
+              {/* Options (2 Kolom di mobile agar ringkas) */}
+              <div className="grid grid-cols-2 gap-2">
+                {quizOptions.map((opt, idx) => {
+                  const isSelected = selectedOption === idx;
+                  let btnStyle = 'bg-slate-50 hover:bg-rose-50 border-slate-200 text-slate-700 hover:border-rose-300';
+                  if (quizStatus !== 'idle') {
+                    if (opt.isCorrect) {
+                      btnStyle = 'bg-emerald-500 text-white border-emerald-500 shadow-md';
+                    } else if (isSelected && !opt.isCorrect) {
+                      btnStyle = 'bg-rose-500 text-white border-rose-500 shadow-md';
+                    } else {
+                      btnStyle = 'bg-slate-100 text-slate-400 border-slate-200 opacity-60';
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => handleAnswer(opt, idx)}
+                      disabled={isTransitioning}
+                      className={`p-2.5 sm:p-3 rounded-2xl font-bold text-xs sm:text-sm text-left border transition-all flex items-center justify-between cursor-pointer active:scale-98 ${btnStyle}`}
+                    >
+                      <span className="truncate">{opt.text}</span>
+                      {quizStatus !== 'idle' && opt.isCorrect && (
+                        <Check className="w-3.5 h-3.5 stroke-[3] shrink-0 ml-1" />
+                      )}
+                      {quizStatus !== 'idle' && isSelected && !opt.isCorrect && (
+                        <X className="w-3.5 h-3.5 stroke-[3] shrink-0 ml-1" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400">
+                <span>Audio penutur asli Jepang</span>
+                <button
+                  onClick={() => initQuiz()}
+                  className="flex items-center gap-1 text-slate-500 hover:text-rose-600 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Acak Ulang</span>
+                </button>
+              </div>
+            </motion.div>
           ) : (
-            <div className="max-w-md mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 soft-shadow-lg text-center">
-              <Trophy className="w-14 h-14 sm:w-16 sm:h-16 text-purple-500 mx-auto mb-3" />
-              <h3 className="text-xl sm:text-2xl font-black text-slate-800">Kuis Kosakata Selesai! 🎉</h3>
-              <p className="text-slate-500 text-xs sm:text-sm mt-1">Skor Akhir: {score} • Akurasi: {accuracy}%</p>
+            <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-100 soft-shadow-lg text-center">
+              <Trophy className="w-12 h-12 text-rose-500 mx-auto mb-2" />
+              <h3 className="text-xl font-black text-slate-800">Kuis Kosakata Selesai! 🎉</h3>
+              <p className="text-slate-500 text-xs mt-1">Skor Akhir: {score} • Akurasi: {accuracy}%</p>
               <button
                 onClick={() => initQuiz()}
-                className="mt-5 w-full py-3.5 rounded-2xl font-black bg-purple-600 hover:bg-purple-700 active:scale-95 text-white soft-shadow cursor-pointer transition-all"
+                className="mt-4 w-full py-3 rounded-2xl font-black bg-rose-600 hover:bg-rose-700 active:scale-95 text-white soft-shadow cursor-pointer transition-all text-xs sm:text-sm"
               >
                 Main Lagi (Acak Ulang)
               </button>
             </div>
           )}
+
+          {/* ================= 3. PILIHAN KATEGORI KOSAKATA (Di Bawah Card Kuis) ================= */}
+          <div className="space-y-1.5 pt-0.5">
+            <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-1 block">
+              Pilihan Kategori Kosakata
+            </span>
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5">
+              {KOSAKATA_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    playPopSound();
+                    handleSelectCategory(cat.id);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    selectedCat === cat.id
+                      ? 'bg-rose-600 text-white soft-shadow-sm'
+                      : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'
+                  }`}
+                >
+                  <span>{cat.name}</span>
+                  <span className="ml-1 opacity-70">({cat.count})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ================= 4. INFO STATS (Paling Bawah) ================= */}
+          <div className="grid grid-cols-4 gap-1.5">
+            <div className="bg-white/90 rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px]">
+                <Flame className={`w-3 h-3 ${streak >= 3 ? 'animate-bounce text-orange-500' : ''}`} />
+                <span>Streak</span>
+              </div>
+              <span className="text-sm font-black text-slate-800">{streak}</span>
+            </div>
+            <div className="bg-white/90 rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-rose-600 font-extrabold text-[10px]">
+                <Trophy className="w-3 h-3" />
+                <span>Skor</span>
+              </div>
+              <span className="text-sm font-black text-slate-800">{score}</span>
+            </div>
+            <div className="bg-white/90 rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-emerald-500 font-extrabold text-[10px]">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Akurasi</span>
+              </div>
+              <span className="text-sm font-black text-slate-800">{accuracy}%</span>
+            </div>
+            <div className="bg-white/90 rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <span className="text-[10px] font-bold text-slate-400">Kartu</span>
+              <span className="text-sm font-black text-slate-800">
+                {deck.length > 0 ? `${currentIndex + 1}/${deck.length}` : '0/0'}
+              </span>
+            </div>
+          </div>
         </div>
       ) : (
-        /* DAFTAR KOSAKATA */
-        <div className="space-y-4 sm:space-y-6">
-          <div className="flex flex-col sm:flex-row items-center gap-2.5 max-w-2xl mx-auto">
+        /* ================= DAFTAR KOSAKATA ================= */
+        <div className="space-y-3">
+          <div className="flex flex-col gap-2">
             <div className="relative w-full">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari kata, romaji, atau arti (cth: taberu, makan, おはよう)..."
-                className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200 soft-inner-shadow focus:outline-none focus:border-purple-500 text-xs sm:text-sm font-medium"
+                placeholder="Cari kata, romaji, atau arti (cth: taberu, makan)..."
+                className="w-full pl-9 pr-3 py-2 rounded-2xl bg-white border border-slate-200 soft-inner-shadow focus:outline-none focus:border-rose-500 text-xs font-medium"
               />
             </div>
 
-            <div className="flex gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+            <div className="flex gap-1.5 w-full overflow-x-auto no-scrollbar pb-0.5">
               {KOSAKATA_CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
@@ -415,7 +418,7 @@ export default function Kosakata() {
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                     listCategory === cat.id
-                      ? 'bg-purple-600 text-white shadow-sm'
+                      ? 'bg-rose-600 text-white shadow-sm'
                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                   }`}
                 >
@@ -425,20 +428,20 @@ export default function Kosakata() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {filteredList.map((v) => (
               <div
                 key={v.id}
-                className="bg-white/95 rounded-2xl p-3 sm:p-4 border border-slate-100 soft-shadow-sm flex items-center justify-between group hover:border-purple-200 transition-all active:bg-purple-50"
+                className="bg-white/95 rounded-2xl p-2.5 sm:p-3 border border-slate-100 soft-shadow-sm flex items-center justify-between group hover:border-rose-200 transition-all active:bg-rose-50"
               >
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-jp text-base sm:text-lg font-black text-slate-800">{v.kana}</span>
+                    <span className="font-jp text-sm sm:text-base font-black text-slate-800">{v.kana}</span>
                     {v.kanji !== '-' && (
-                      <span className="text-[11px] text-slate-400 font-jp">({v.kanji})</span>
+                      <span className="text-[10px] text-slate-400 font-jp">({v.kanji})</span>
                     )}
                   </div>
-                  <span className="text-[10px] sm:text-[11px] text-purple-600 font-semibold block">{v.romaji}</span>
+                  <span className="text-[10px] text-[#EA4A30] font-semibold block">{v.romaji}</span>
                   <span className="text-xs text-slate-600 font-medium">{v.arti}</span>
                 </div>
 
@@ -448,7 +451,7 @@ export default function Kosakata() {
                     speakJapanese(v.kana);
                   }}
                   title="Dengarkan suara"
-                  className="p-2 rounded-xl bg-purple-50 text-purple-600 hover:bg-purple-100 cursor-pointer transition-colors active:scale-90"
+                  className="p-1.5 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 cursor-pointer transition-colors active:scale-90"
                 >
                   <Volume2 className="w-4 h-4" />
                 </button>
@@ -460,4 +463,3 @@ export default function Kosakata() {
     </section>
   );
 }
-

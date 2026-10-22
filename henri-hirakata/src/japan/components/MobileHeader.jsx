@@ -25,23 +25,23 @@ export default function MobileHeader() {
   const getPageTitle = () => {
     switch (location.pathname) {
       case '/hiragana':
-        return { title: 'Hiragana', subtitle: '104 Huruf Flashcard', color: 'text-indigo-600' };
+        return { title: 'Hiragana', subtitle: '104 Huruf Flashcard', color: 'text-[#EA4A30]' };
       case '/katakana':
-        return { title: 'Katakana', subtitle: '104 Huruf Serapan', color: 'text-cyan-600' };
+        return { title: 'Katakana', subtitle: '104 Huruf Serapan', color: 'text-amber-600' };
       case '/kanji':
         return { title: 'Kanji N5', subtitle: '105 Karakter Inti', color: 'text-purple-600' };
       case '/kosakata':
-        return { title: 'Kosakata N5', subtitle: '80 Kata & Frasa', color: 'text-fuchsia-600' };
+        return { title: 'Kosakata N5', subtitle: '80 Kata & Frasa', color: 'text-rose-600' };
       case '/tatabahasa':
         return { title: 'Tata Bahasa', subtitle: 'Partikel & Kalimat', color: 'text-emerald-600' };
       case '/latihan':
         return { title: 'Simulasi N5', subtitle: '15 Soal Ujian', color: 'text-amber-600' };
       case '/peta-jalan':
-        return { title: 'Peta Jalan', subtitle: 'Silabus Belajar N5', color: 'text-indigo-600' };
+        return { title: 'Peta Jalan', subtitle: 'Silabus Belajar N5', color: 'text-[#EA4A30]' };
       case '/profil':
         return { title: 'Profil Belajar', subtitle: 'Statistik & Pengaturan', color: 'text-purple-600' };
       default:
-        return { title: 'HiraKata', subtitle: 'Belajar N5', color: 'text-indigo-600' };
+        return { title: 'HenHan Go', subtitle: 'Japanese Learning Hub', color: 'text-[#EA4A30]' };
     }
   };
 

@@ -8,6 +8,8 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { playPopSound, getMuted, setMuted } from '../utils/audio';
+import henhanLogo from '../../assets/henhan_logo.jpg';
+import ippoImg from '../../assets/ippo.png';
 
 export default function HeroSection() {
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ export default function HeroSection() {
       title: 'Hiragana',
       subtitle: '104 Huruf',
       icon: 'あ',
-      iconBg: 'bg-indigo-600 text-white',
+      iconBg: 'bg-gradient-to-tr from-[#EA4A30] to-[#F59E0B] text-white',
     },
     {
       id: 'katakana',
@@ -42,7 +44,7 @@ export default function HeroSection() {
       title: 'Katakana',
       subtitle: '104 Huruf',
       icon: 'ア',
-      iconBg: 'bg-cyan-600 text-white',
+      iconBg: 'bg-gradient-to-tr from-cyan-600 to-sky-500 text-white',
     },
     {
       id: 'kanji',
@@ -50,7 +52,7 @@ export default function HeroSection() {
       title: 'Kanji',
       subtitle: '105 Kanji',
       icon: '日',
-      iconBg: 'bg-purple-600 text-white',
+      iconBg: 'bg-gradient-to-tr from-amber-500 to-orange-500 text-white',
     },
     {
       id: 'kosakata',
@@ -58,7 +60,7 @@ export default function HeroSection() {
       title: 'Kosakata',
       subtitle: '80 Kata',
       icon: '話',
-      iconBg: 'bg-fuchsia-600 text-white',
+      iconBg: 'bg-gradient-to-tr from-fuchsia-600 to-rose-500 text-white',
     },
     {
       id: 'tatabahasa',
@@ -66,7 +68,7 @@ export default function HeroSection() {
       title: 'Tata Bahasa',
       subtitle: 'Partikel N5',
       icon: '文',
-      iconBg: 'bg-emerald-600 text-white',
+      iconBg: 'bg-gradient-to-tr from-emerald-600 to-teal-500 text-white',
     },
     {
       id: 'latihan',
@@ -74,24 +76,27 @@ export default function HeroSection() {
       title: 'Simulasi Ujian',
       subtitle: 'Tes N5',
       icon: '試',
-      iconBg: 'bg-amber-500 text-white',
+      iconBg: 'bg-gradient-to-tr from-indigo-600 to-purple-600 text-white',
     },
   ];
 
   return (
-    <div className="min-h-full px-4 pt-2 pb-6 max-w-md mx-auto flex flex-col justify-between space-y-4 sm:space-y-5">
-      {/* 1. Header: Centered HiraKata Title (Wireframe) */}
-      <div className="flex items-center justify-between pt-safe pt-1">
-        <div className="w-8" /> {/* Spacer to ensure title remains mathematically centered */}
-
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center gap-1.5">
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-800">
-              HiraKata
+    <div className="min-h-[calc(100dvh-5.5rem)] flex flex-col justify-around max-w-md mx-auto px-4 pt-safe pt-4 sm:pt-6 pb-6 sm:pb-8 gap-4 sm:gap-5 w-full">
+      {/* 1. Header: Brand Logo & Title HenHan Go */}
+      <div className="flex items-center justify-between pt-2 pb-1">
+        <div className="flex items-center gap-2.5">
+          <img
+            src={henhanLogo}
+            alt="HenHan Go Logo"
+            className="w-10 h-10 rounded-2xl object-cover border border-amber-200/80 soft-shadow-sm"
+          />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-800 leading-tight">
+              HenHan <span className="text-[#EA4A30]">Go</span>
             </h1>
-            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-600 border border-indigo-100">
-              N5
-            </span>
+            <p className="text-[11px] text-slate-400 font-semibold tracking-wide">
+              Japanese Learning Hub
+            </p>
           </div>
         </div>
 
@@ -100,7 +105,7 @@ export default function HeroSection() {
           onClick={handleToggleSound}
           title={audioMuted ? 'Nyalakan Efek Suara' : 'Bisukan Efek Suara'}
           aria-label="Toggle Sound"
-          className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
+          className={`w-9 h-9 rounded-2xl border flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
             audioMuted
               ? 'bg-rose-50 border-rose-200 text-rose-600'
               : 'bg-white border-slate-200 text-emerald-600 soft-shadow-sm'
@@ -110,53 +115,35 @@ export default function HeroSection() {
         </button>
       </div>
 
-      {/* 2. Banner: placeholder buat gambar nanti (Wireframe) */}
+      {/* 2. Banner Card: Image ippo.png with subtle border */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="relative overflow-hidden rounded-3xl p-5 bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 text-white soft-shadow-lg text-center"
+        className="relative overflow-hidden rounded-3xl border border-slate-200/90 soft-shadow-sm bg-white"
       >
-        {/* Soft Background Accents */}
-        <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
-        <div className="absolute -bottom-12 -left-12 w-32 h-32 rounded-full bg-purple-400/20 blur-xl pointer-events-none" />
-
-        <div className="relative z-10 py-2 sm:py-3 space-y-2">
-          {/* Wireframe Placeholder Tag */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold">
-            <Sparkles className="w-3 h-3 text-amber-300 animate-pulse" />
-            <span>placeholder buat gambar nanti</span>
-          </div>
-
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-xl">🌸</span>
-            <h2 className="text-base sm:text-lg font-black tracking-tight drop-shadow-sm text-white">
-              Belajar Huruf & Bahasa Jepang
-            </h2>
-            <span className="text-xl">🎌</span>
-          </div>
-
-          <p className="text-xs text-indigo-100/90 max-w-xs mx-auto leading-relaxed font-medium">
-            Kuasai Hiragana, Katakana, Kanji, dan Tata Bahasa N5 dengan kuis interaktif!
-          </p>
-        </div>
+        <img
+          src={ippoImg}
+          alt="Hajime no Ippo - Belajar Bahasa Jepang"
+          className="w-full h-36 sm:h-44 object-cover object-center"
+        />
       </motion.div>
 
-      {/* 3. 3x2 Grid of 6 Squircle Buttons (Wireframe) */}
-      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+      {/* 3. 3x2 Grid of 6 Squircle Buttons */}
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5">
         {modules.map((item) => (
           <motion.button
             key={item.id}
             whileTap={{ scale: 0.92 }}
             onClick={() => handleNav(item.path)}
-            className="flex flex-col items-center justify-center p-3 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 soft-shadow-sm hover:soft-shadow-md hover:border-indigo-300 transition-all cursor-pointer group select-none text-center"
+            className="flex flex-col items-center justify-center p-3 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/80 soft-shadow-sm hover:soft-shadow-md hover:border-[#EA4A30]/40 transition-all cursor-pointer group select-none text-center"
           >
             <div
               className={`w-11 h-11 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center font-jp font-black text-xl mb-1.5 soft-shadow transition-transform group-hover:scale-105 ${item.iconBg}`}
             >
               {item.icon}
             </div>
-            <span className="text-xs font-black text-slate-800 tracking-tight leading-tight group-hover:text-indigo-600 transition-colors">
+            <span className="text-xs font-black text-slate-800 tracking-tight leading-tight group-hover:text-[#EA4A30] transition-colors">
               {item.title}
             </span>
             <span className="text-[10px] font-semibold text-slate-400 mt-0.5">
@@ -166,20 +153,20 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* 4. Dedicated CTA Bar: Mulai Quiz sekarang ! (Wireframe) */}
+      {/* 4. Dedicated CTA Bar */}
       <div className="space-y-2 pt-1">
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => handleNav('/hiragana')}
-          className="w-full py-3.5 sm:py-4 px-6 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-black text-base sm:text-lg soft-shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer group"
+          className="w-full py-3.5 sm:py-4 px-6 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#EA4A30] via-[#EB5338] to-[#F59E0B] hover:opacity-95 text-white font-black text-base sm:text-lg soft-shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer group"
         >
-          <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+          <Sparkles className="w-5 h-5 text-amber-200 animate-pulse" />
           <span>Mulai Quiz sekarang !</span>
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </motion.button>
 
-        <p className="text-center text-[11px] text-slate-400 font-medium">
-          🔥 Kuis acak instan dengan feedback Quizizz & audio asli
+        <p className="text-center text-[11px] text-slate-500 font-medium">
+          🔥 Kuis acak untuk mempermudah mengingat + feedback & audio asli
         </p>
       </div>
     </div>

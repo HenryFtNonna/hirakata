@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
   Volume2,
-  Sparkles,
   RotateCcw,
   HelpCircle,
   ArrowRight,
@@ -218,34 +217,27 @@ export default function Hiragana() {
   const progressPercent = deck.length > 0 ? Math.round(((currentIndex + 1) / deck.length) * 100) : 0;
 
   return (
-    <section id="hiragana-section" className="py-6 sm:py-12 px-3 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-      {/* Header Bagian Hiragana */}
-      <div className="text-center mb-6 sm:mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100/80 text-indigo-700 text-xs font-semibold mb-2.5 soft-shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-500 animate-pulse" />
-          <span>Fokus Utama • 104 Karakter Lengkap</span>
-        </div>
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight">
-          Kuis Flashcard Hiragana
-        </h2>
-        <p className="mt-1.5 text-slate-500 text-xs sm:text-base max-w-xl mx-auto px-2">
-          Tulis romaji di bawah kartu. Jawaban benar langsung lanjut dengan efek visual instan ala Quizizz!
-        </p>
+    <section id="hiragana-section" className="py-2 px-3 sm:px-4 max-w-md mx-auto space-y-3 sm:space-y-3.5">
+      {/* ================= JUDUL UTAMA ================= */}
+      <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight text-center pt-1">
+        Kuis Flashcard Hiragana
+      </h2>
 
-        {/* Tab Switcher: Kuis Flashcard vs Tabel Lengkap */}
-        <div className="mt-4 sm:mt-6 inline-flex p-1 rounded-2xl bg-slate-200/70 backdrop-blur-sm soft-inner-shadow">
+      {/* ================= 1. PILIHAN MODE QUIZ DAN TABEL (Paling Atas) ================= */}
+      <div className="flex flex-col items-center gap-2 pt-1">
+        <div className="inline-flex p-1 rounded-2xl bg-slate-200/80 backdrop-blur-sm soft-inner-shadow">
           <button
             onClick={() => {
               playPopSound();
               setActiveTab('quiz');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
               activeTab === 'quiz'
                 ? 'bg-white text-indigo-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Gamepad2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Gamepad2 className="w-3.5 h-3.5" />
             <span>Mode Kuis</span>
           </button>
           <button
@@ -253,22 +245,242 @@ export default function Hiragana() {
               playPopSound();
               setActiveTab('chart');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer ${
               activeTab === 'chart'
                 ? 'bg-white text-indigo-600 shadow-sm'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <BookOpen className="w-3.5 h-3.5" />
             <span>Tabel 104 Huruf</span>
           </button>
         </div>
+
+        {/* Progress Bar Mini */}
+        {activeTab === 'quiz' && (
+          <div className="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden soft-inner-shadow">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400 rounded-full transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        )}
       </div>
 
       {activeTab === 'quiz' ? (
-        <div className="space-y-4 sm:space-y-6">
-          {/* Bar Filter Kategori (Swipeable di mobile) */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto no-scrollbar py-1 px-1 justify-start sm:justify-center">
+        <div className="space-y-3 sm:space-y-3.5">
+          {/* ================= 2. CARD QUIZ (Sesuai Sketsa: Di Bawah Pilihan Mode Agar Tidak Tertutup Keyboard) ================= */}
+          {!quizFinished && currentCard ? (
+            <motion.div
+              key={currentCard.id}
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={
+                status === 'wrong'
+                  ? {
+                      scale: 1,
+                      opacity: 1,
+                      x: [-14, 14, -10, 10, -5, 5, 0],
+                      transition: { duration: 0.4 },
+                    }
+                  : status === 'correct'
+                  ? {
+                      scale: 1.02,
+                      opacity: 1,
+                      transition: { duration: 0.25 },
+                    }
+                  : { scale: 1, opacity: 1, transition: { duration: 0.2 } }
+              }
+              className={`relative rounded-3xl p-4 sm:p-6 transition-colors duration-200 border-2 ${
+                status === 'correct'
+                  ? 'bg-gradient-to-b from-emerald-50 to-white border-emerald-400 soft-shadow-success'
+                  : status === 'wrong'
+                  ? 'bg-gradient-to-b from-rose-50 to-white border-rose-400 soft-shadow-error'
+                  : 'bg-white/95 backdrop-blur-md border-white/80 soft-shadow-lg'
+              }`}
+            >
+              {/* Header Kartu: Tipe Huruf & Tombol Audio */}
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200/50">
+                  {currentCard.type === 'seion'
+                    ? 'Dasar (Seion)'
+                    : currentCard.type === 'dakuon'
+                    ? 'Tenten / Maru'
+                    : 'Kombinasi (Yoon)'}
+                </span>
+
+                <button
+                  onClick={() => handlePronounce(currentCard.char)}
+                  title="Dengarkan pengucapan asli Jepang"
+                  aria-label="Dengarkan pengucapan"
+                  className="p-1.5 sm:p-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-100 transition-all hover:scale-105 active:scale-90 cursor-pointer"
+                >
+                  <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              </div>
+
+              {/* Karakter Hiragana Utama */}
+              <div className="my-2 sm:my-4 text-center select-none">
+                <span
+                  onClick={() => handlePronounce(currentCard.char)}
+                  className="font-jp text-6xl sm:text-8xl font-black text-slate-800 tracking-wider hover:text-indigo-600 transition-colors cursor-pointer inline-block"
+                >
+                  {currentCard.char}
+                </span>
+              </div>
+
+              {/* Feedback Banner Interaktif (Quizizz Style) */}
+              <div className="min-h-[1.75rem] flex items-center justify-center mb-2">
+                <AnimatePresence mode="wait">
+                  {status === 'correct' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4, scale: 0.85 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-sm"
+                    >
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                      <span>Bagus! Romaji: {currentCard.romaji.toUpperCase()} 🎉</span>
+                    </motion.div>
+                  )}
+
+                  {status === 'wrong' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4, scale: 0.85 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-1 px-3 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-xs shadow-sm"
+                    >
+                      <XCircle className="w-3.5 h-3.5" />
+                      <span>Kurang tepat! Coba lagi</span>
+                    </motion.div>
+                  )}
+
+                  {revealedAnswer && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-slate-600 text-xs font-semibold bg-amber-50 border border-amber-200 px-3 py-0.5 rounded-full text-center"
+                    >
+                      Jawaban: <span className="font-bold text-amber-700">{revealedAnswer}</span>
+                    </motion.div>
+                  )}
+
+                  {showHint && !revealedAnswer && status === 'idle' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-[11px] text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 rounded-lg text-center"
+                    >
+                      💡 Contoh: <span className="font-semibold">{currentCard.example}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Form Input Jawaban */}
+              <form onSubmit={handleSubmit} className="space-y-2.5">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  autoFocus
+                  inputMode="text"
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  disabled={status === 'correct' || isTransitioning}
+                  value={inputVal}
+                  onChange={handleInputChange}
+                  placeholder="Ketik romaji di sini..."
+                  className={`w-full py-2.5 sm:py-3 px-3 text-center text-xl sm:text-2xl font-bold rounded-2xl transition-all duration-200 border-2 soft-inner-shadow ${
+                    status === 'correct'
+                      ? 'bg-emerald-50 border-emerald-400 text-emerald-800'
+                      : status === 'wrong'
+                      ? 'bg-rose-50 border-rose-400 text-rose-800'
+                      : 'bg-slate-50/90 border-slate-200 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 text-slate-800 placeholder:text-slate-400'
+                  }`}
+                />
+
+                {/* Tombol Aksi: Cek & Hint / Lewati */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={!inputVal.trim() || status === 'correct' || isTransitioning}
+                    className="flex-1 py-2.5 sm:py-3 rounded-2xl font-black text-sm bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white soft-shadow flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <span>Cek</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowHint((prev) => !prev)}
+                    title="Lihat Petunjuk"
+                    className="p-2.5 sm:p-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200/80 active:scale-95 transition-all cursor-pointer"
+                  >
+                    <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleGiveUp}
+                    disabled={isTransitioning}
+                    title="Lewati"
+                    className="px-3.5 py-2.5 sm:py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs sm:text-sm font-bold active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    Lewati
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          ) : (
+            /* Modal Selesai Kuis */
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white/95 backdrop-blur-md rounded-3xl p-6 border border-slate-100 soft-shadow-lg text-center"
+            >
+              <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-100 text-amber-600 flex items-center justify-center mb-3 soft-shadow">
+                <Trophy className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-black text-slate-800">Kuis Selesai! 🎉</h3>
+              <p className="text-slate-500 text-xs mt-1">Kamu telah menyelesaikan set kartu ini.</p>
+
+              <div className="grid grid-cols-3 gap-2 my-4">
+                <div className="p-2 rounded-2xl bg-slate-50 border border-slate-100">
+                  <span className="block text-[10px] text-slate-400 font-bold">Skor</span>
+                  <span className="text-base font-black text-indigo-600">{score}</span>
+                </div>
+                <div className="p-2 rounded-2xl bg-slate-50 border border-slate-100">
+                  <span className="block text-[10px] text-slate-400 font-bold">Akurasi</span>
+                  <span className="text-base font-black text-emerald-600">{accuracy}%</span>
+                </div>
+                <div className="p-2 rounded-2xl bg-slate-50 border border-slate-100">
+                  <span className="block text-[10px] text-slate-400 font-bold">Max Streak</span>
+                  <span className="text-base font-black text-amber-600">{bestStreak}🔥</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => initQuiz()}
+                  className="w-full py-2.5 rounded-2xl font-black text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white soft-shadow transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Main Lagi (Acak Huruf Baru)</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('chart')}
+                  className="w-full py-2 rounded-2xl font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-95 transition-all cursor-pointer"
+                >
+                  Buka Tabel Lengkap 104 Huruf
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ================= 3. PILIHAN HURUF (Sesuai Sketsa: Di Bawah Card Quiz) ================= */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 justify-start sm:justify-center">
             {HIRAGANA_CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
@@ -276,15 +488,15 @@ export default function Hiragana() {
                   playPopSound();
                   handleSelectCategory(cat.id);
                 }}
-                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 whitespace-nowrap cursor-pointer shrink-0 ${
+                className={`px-3 py-1.5 rounded-2xl text-xs font-bold transition-all duration-200 whitespace-nowrap cursor-pointer shrink-0 ${
                   selectedCategory === cat.id
-                    ? 'bg-indigo-600 text-white soft-shadow-sm scale-102 ring-2 ring-indigo-300'
-                    : 'bg-white/90 text-slate-600 border border-slate-200/60 soft-shadow-sm hover:border-indigo-200'
+                    ? 'bg-indigo-600 text-white soft-shadow-sm ring-2 ring-indigo-300'
+                    : 'bg-white text-slate-600 border border-slate-200/70 soft-shadow-sm hover:border-indigo-200'
                 }`}
               >
                 <span>{cat.name}</span>
                 <span
-                  className={`ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-semibold ${
+                  className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-semibold ${
                     selectedCategory === cat.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
                   }`}
                 >
@@ -294,287 +506,51 @@ export default function Hiragana() {
             ))}
           </div>
 
-          {/* Stats Bar Soft Rounded (Compact on mobile) */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-4 max-w-xl mx-auto">
+          {/* ================= 4. INFO STREAK, SKOR DLL. (Sesuai Sketsa: Di Bawah Pilihan Huruf) ================= */}
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
             {/* Streak */}
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3.5 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px] sm:text-xs">
-                <Flame className={`w-3 h-3 sm:w-4 sm:h-4 ${streak >= 3 ? 'animate-bounce text-orange-500' : ''}`} />
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px]">
+                <Flame className={`w-3 h-3 ${streak >= 3 ? 'animate-bounce text-orange-500' : ''}`} />
                 <span>Streak</span>
               </div>
-              <span className="text-base sm:text-xl font-black text-slate-800">{streak}</span>
+              <span className="text-sm sm:text-base font-black text-slate-800">{streak}</span>
             </div>
 
-            {/* Score */}
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3.5 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-indigo-500 font-extrabold text-[10px] sm:text-xs">
-                <Trophy className="w-3 h-3 sm:w-4 sm:h-4" />
+            {/* Skor */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-indigo-500 font-extrabold text-[10px]">
+                <Trophy className="w-3 h-3" />
                 <span>Skor</span>
               </div>
-              <span className="text-base sm:text-xl font-black text-slate-800">{score}</span>
+              <span className="text-sm sm:text-base font-black text-slate-800">{score}</span>
             </div>
 
             {/* Akurasi */}
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3.5 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-emerald-500 font-extrabold text-[10px] sm:text-xs">
-                <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-emerald-500 font-extrabold text-[10px]">
+                <CheckCircle2 className="w-3 h-3" />
                 <span>Akurasi</span>
               </div>
-              <span className="text-base sm:text-xl font-black text-slate-800">{accuracy}%</span>
+              <span className="text-sm sm:text-base font-black text-slate-800">{accuracy}%</span>
             </div>
 
-            {/* Progres */}
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-2 sm:p-3.5 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
-              <div className="flex items-center gap-0.5 text-sky-500 font-extrabold text-[10px] sm:text-xs">
-                <Zap className="w-3 h-3 sm:w-4 sm:h-4" />
+            {/* Progres Kartu */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-2 border border-slate-100 soft-shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="flex items-center gap-0.5 text-sky-500 font-extrabold text-[10px]">
+                <Zap className="w-3 h-3" />
                 <span>Kartu</span>
               </div>
-              <span className="text-base sm:text-xl font-black text-slate-800">
+              <span className="text-sm sm:text-base font-black text-slate-800">
                 {deck.length > 0 ? `${currentIndex + 1}/${deck.length}` : '0/0'}
               </span>
             </div>
           </div>
-
-          {/* Progress Bar Soft */}
-          <div className="max-w-xl mx-auto px-1">
-            <div className="w-full bg-slate-200/70 h-2 sm:h-2.5 rounded-full overflow-hidden p-0.5 soft-inner-shadow">
-              <div
-                className="h-full bg-gradient-to-r from-indigo-500 via-sky-400 to-emerald-400 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Quiz Card Container */}
-          {!quizFinished && currentCard ? (
-            <div className="max-w-md mx-auto">
-              <motion.div
-                key={currentCard.id}
-                initial={{ scale: 0.94, opacity: 0, y: 10 }}
-                animate={
-                  status === 'wrong'
-                    ? {
-                        scale: 1,
-                        opacity: 1,
-                        y: 0,
-                        x: [-14, 14, -10, 10, -5, 5, 0],
-                        transition: { duration: 0.4 },
-                      }
-                    : status === 'correct'
-                    ? {
-                        scale: 1.03,
-                        opacity: 1,
-                        y: 0,
-                        transition: { duration: 0.25 },
-                      }
-                    : { scale: 1, opacity: 1, y: 0, transition: { duration: 0.3 } }
-                }
-                className={`relative rounded-3xl p-5 sm:p-8 transition-colors duration-200 border-2 ${
-                  status === 'correct'
-                    ? 'bg-gradient-to-b from-emerald-50 to-white border-emerald-400 soft-shadow-success'
-                    : status === 'wrong'
-                    ? 'bg-gradient-to-b from-rose-50 to-white border-rose-400 soft-shadow-error'
-                    : 'bg-white/95 backdrop-blur-md border-white/80 soft-shadow-lg'
-                }`}
-              >
-                {/* Badge Tipe Huruf & Tombol Audio */}
-                <div className="flex items-center justify-between mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200/50">
-                    {currentCard.type === 'seion'
-                      ? 'Dasar (Seion)'
-                      : currentCard.type === 'dakuon'
-                      ? 'Tenten / Maru'
-                      : 'Kombinasi (Yoon)'}
-                  </span>
-
-                  <button
-                    onClick={() => handlePronounce(currentCard.char)}
-                    title="Dengarkan pengucapan asli Jepang"
-                    aria-label="Dengarkan pengucapan"
-                    className="p-2 sm:p-2.5 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-100 transition-all hover:scale-105 active:scale-90 cursor-pointer"
-                  >
-                    <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </button>
-                </div>
-
-                {/* Karakter Hiragana Utama */}
-                <div className="my-4 sm:my-8 text-center select-none">
-                  <span
-                    onClick={() => handlePronounce(currentCard.char)}
-                    className="font-jp text-7xl sm:text-9xl font-black text-slate-800 tracking-wider hover:text-indigo-600 transition-colors cursor-pointer inline-block"
-                  >
-                    {currentCard.char}
-                  </span>
-                </div>
-
-                {/* Feedback Banner Interaktif (Quizizz Style) */}
-                <div className="min-h-[2.25rem] flex items-center justify-center mb-3">
-                  <AnimatePresence mode="wait">
-                    {status === 'correct' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 6, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500 text-white font-extrabold text-xs sm:text-sm shadow-md"
-                      >
-                        <Check className="w-4 h-4 stroke-[3]" />
-                        <span>Bagus Sekali! Romaji: {currentCard.romaji.toUpperCase()} 🎉</span>
-                      </motion.div>
-                    )}
-
-                    {status === 'wrong' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -6, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-500 text-white font-extrabold text-xs sm:text-sm shadow-md"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        <span>Kurang Tepat! Coba lagi</span>
-                      </motion.div>
-                    )}
-
-                    {revealedAnswer && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-slate-600 text-xs sm:text-sm font-semibold bg-amber-50 border border-amber-200 px-3 py-1 rounded-full text-center"
-                      >
-                        Jawaban benar: <span className="font-bold text-amber-700">{revealedAnswer}</span>
-                      </motion.div>
-                    )}
-
-                    {showHint && !revealedAnswer && status === 'idle' && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-xs text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded-xl text-center"
-                      >
-                        💡 Contoh kata: <span className="font-semibold">{currentCard.example}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Form Input Jawaban */}
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    autoFocus
-                    inputMode="text"
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    spellCheck="false"
-                    disabled={status === 'correct' || isTransitioning}
-                    value={inputVal}
-                    onChange={handleInputChange}
-                    placeholder="Ketik romaji di sini..."
-                    className={`w-full py-3 sm:py-4 px-3 text-center text-xl sm:text-2xl font-bold rounded-2xl transition-all duration-200 border-2 soft-inner-shadow ${
-                      status === 'correct'
-                        ? 'bg-emerald-50 border-emerald-400 text-emerald-800'
-                        : status === 'wrong'
-                        ? 'bg-rose-50 border-rose-400 text-rose-800'
-                        : 'bg-slate-50/90 border-slate-200 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 text-slate-800 placeholder:text-slate-400'
-                    }`}
-                  />
-
-                  {/* Tombol Aksi: Cek & Nyerah / Hint */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="submit"
-                      disabled={!inputVal.trim() || status === 'correct' || isTransitioning}
-                      className="flex-1 py-3 sm:py-3.5 rounded-2xl font-black text-sm sm:text-base bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white soft-shadow flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-                    >
-                      <span>Cek</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowHint((prev) => !prev)}
-                      title="Lihat Petunjuk"
-                      className="p-3 sm:p-3.5 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200/80 active:scale-95 transition-all cursor-pointer"
-                    >
-                      <HelpCircle className="w-5 h-5" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleGiveUp}
-                      disabled={isTransitioning}
-                      title="Nyerah / Lewati"
-                      className="px-3 sm:px-3.5 py-3 sm:py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs sm:text-sm font-bold active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-                    >
-                      Lewati
-                    </button>
-                  </div>
-                </form>
-
-                {/* Footer Kartu */}
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs text-slate-400">
-                  <span>Enter = Cek Jawaban</span>
-                  <button
-                    onClick={() => initQuiz()}
-                    className="flex items-center gap-1 text-slate-500 hover:text-indigo-600 font-medium transition-colors cursor-pointer"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Acak Ulang</span>
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          ) : (
-            /* Modal Selesai Kuis */
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="max-w-md mx-auto bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-slate-100 soft-shadow-lg text-center"
-            >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-amber-100 text-amber-600 flex items-center justify-center mb-3 soft-shadow">
-                <Trophy className="w-8 h-8 sm:w-10 sm:h-10" />
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-800">Kuis Selesai! 🎉</h3>
-              <p className="text-slate-500 text-xs sm:text-sm mt-1">Kamu telah menyelesaikan seluruh kartu dalam set ini.</p>
-
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 my-5">
-                <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <span className="block text-[10px] sm:text-xs text-slate-400 font-bold">Skor</span>
-                  <span className="text-lg sm:text-xl font-black text-indigo-600">{score}</span>
-                </div>
-                <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <span className="block text-[10px] sm:text-xs text-slate-400 font-bold">Akurasi</span>
-                  <span className="text-lg sm:text-xl font-black text-emerald-600">{accuracy}%</span>
-                </div>
-                <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <span className="block text-[10px] sm:text-xs text-slate-400 font-bold">Max Streak</span>
-                  <span className="text-lg sm:text-xl font-black text-amber-600">{bestStreak}🔥</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => initQuiz()}
-                  className="w-full py-3 sm:py-3.5 rounded-2xl font-black text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white soft-shadow transition-all cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  <span>Main Lagi (Acak Huruf Baru)</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('chart')}
-                  className="w-full py-2.5 sm:py-3 rounded-2xl font-bold text-xs sm:text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 active:scale-95 transition-all cursor-pointer"
-                >
-                  Buka Tabel Lengkap 104 Huruf
-                </button>
-              </div>
-            </motion.div>
-          )}
         </div>
       ) : (
         /* ================= MODE TABEL LENGKAP 104 HURUF ================= */
-        <div className="space-y-4 sm:space-y-6">
-          <div className="flex flex-col sm:flex-row items-center gap-2.5 max-w-2xl mx-auto">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
             <div className="relative w-full">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
@@ -582,11 +558,11 @@ export default function Hiragana() {
                 value={chartSearch}
                 onChange={(e) => setChartSearch(e.target.value)}
                 placeholder="Cari huruf atau romaji (cth: a, ka, き)..."
-                className="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200 soft-inner-shadow focus:outline-none focus:border-indigo-500 text-xs sm:text-sm font-medium"
+                className="w-full pl-9 pr-4 py-2 sm:py-2.5 rounded-2xl bg-white border border-slate-200 soft-inner-shadow focus:outline-none focus:border-indigo-500 text-xs sm:text-sm font-medium"
               />
             </div>
 
-            <div className="flex gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+            <div className="flex gap-1.5 w-full sm:w-auto overflow-x-auto no-scrollbar pb-0.5">
               {['all', 'seion', 'dakuon', 'yoon'].map((cat) => (
                 <button
                   key={cat}
@@ -612,25 +588,25 @@ export default function Hiragana() {
             </div>
           </div>
 
-          <p className="text-center text-[11px] sm:text-xs text-slate-500">
+          <p className="text-center text-[10px] sm:text-xs text-slate-500">
             💡 Tips: Ketuk kartu huruf untuk mendengarkan audio pengucapan asli!
           </p>
 
-          {/* Grid Karakter Responsif (4 kolom di HP, 6 di tablet, 8 di desktop) */}
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 sm:gap-3">
+          {/* Grid Karakter Responsif (4 kolom di HP) */}
+          <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
             {filteredChartData.map((item) => (
               <motion.div
                 key={item.id}
-                whileHover={{ scale: 1.05, y: -2 }}
+                whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.92 }}
                 onClick={() => {
                   playPopSound();
                   speakJapanese(item.char);
                 }}
-                className="bg-white/95 rounded-2xl p-2.5 sm:p-3.5 border border-slate-100 soft-shadow-sm hover:soft-shadow hover:border-indigo-200 transition-all flex flex-col items-center justify-center text-center cursor-pointer group active:bg-indigo-50"
+                className="bg-white/95 rounded-2xl p-2 sm:p-3 border border-slate-100 soft-shadow-sm hover:soft-shadow hover:border-indigo-200 transition-all flex flex-col items-center justify-center text-center cursor-pointer group active:bg-indigo-50"
               >
                 <div className="flex items-center justify-between w-full mb-0.5">
-                  <span className="text-[9px] font-bold text-slate-400 group-hover:text-indigo-400">
+                  <span className="text-[8px] font-bold text-slate-400 group-hover:text-indigo-400">
                     {item.row.toUpperCase()}
                   </span>
                   <Volume2 className="w-3 h-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
@@ -646,7 +622,7 @@ export default function Hiragana() {
           </div>
 
           {filteredChartData.length === 0 && (
-            <div className="text-center py-8 text-slate-400 text-xs sm:text-sm">
+            <div className="text-center py-6 text-slate-400 text-xs">
               <p>Tidak ada huruf yang cocok dengan pencarian "{chartSearch}"</p>
             </div>
           )}
@@ -655,4 +631,3 @@ export default function Hiragana() {
     </section>
   );
 }
-
