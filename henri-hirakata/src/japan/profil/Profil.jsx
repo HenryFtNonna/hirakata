@@ -6,6 +6,7 @@ import {
   Smartphone,
 } from 'lucide-react';
 import { getMuted, setMuted, playPopSound } from '../utils/audio';
+import henhanLogo from '../../assets/henhan_logo.jpg';
 
 export default function Profil() {
   const [audioMuted, setAudioMuted] = useState(getMuted());
@@ -23,12 +24,16 @@ export default function Profil() {
     <div className="pt-7 pb-6 px-4 max-w-md mx-auto space-y-4">
       {/* Header Profil */}
       <div className="text-center">
-        <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center font-jp text-2xl font-black mx-auto soft-shadow mb-2">
-          あ
+        <div className="w-20 h-20 rounded-3xl overflow-hidden mx-auto border-2 border-amber-200/80 soft-shadow mb-2.5 bg-amber-50 flex items-center justify-center">
+          <img
+            src={henhanLogo}
+            alt="HenHan Go Logo"
+            className="w-full h-full object-cover"
+          />
         </div>
-        <h1 className="text-xl font-black text-slate-800">Pelajar Bahasa Jepang</h1>
-        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold mt-1">
-          <Sparkles className="w-3 h-3 text-indigo-500" />
+        <h1 className="text-xl font-black text-slate-800">Pelajar HenHan Go</h1>
+        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-700 text-xs font-bold mt-1">
+          <Sparkles className="w-3 h-3 text-[#EA4A30]" />
           <span>Target JLPT N5</span>
         </div>
       </div>
@@ -41,11 +46,11 @@ export default function Profil() {
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
             <span className="font-bold text-slate-500 block">Hiragana</span>
-            <span className="text-sm font-black text-indigo-600">104 Huruf</span>
+            <span className="text-sm font-black text-[#EA4A30]">104 Huruf</span>
           </div>
           <div className="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
             <span className="font-bold text-slate-500 block">Katakana</span>
-            <span className="text-sm font-black text-cyan-600">104 Huruf</span>
+            <span className="text-sm font-black text-amber-600">104 Huruf</span>
           </div>
           <div className="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
             <span className="font-bold text-slate-500 block">Kanji N5</span>
@@ -53,7 +58,7 @@ export default function Profil() {
           </div>
           <div className="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
             <span className="font-bold text-slate-500 block">Kosakata</span>
-            <span className="text-sm font-black text-fuchsia-600">80 Kosakata</span>
+            <span className="text-sm font-black text-rose-600">80 Kosakata</span>
           </div>
         </div>
       </div>
@@ -73,7 +78,7 @@ export default function Profil() {
               <Volume2 className="w-5 h-5 text-emerald-600" />
             )}
             <div>
-              <p className="font-extrabold text-xs text-slate-800">Efek Suara Quizizz</p>
+              <p className="font-extrabold text-xs text-slate-800">Efek Suara</p>
               <p className="text-[10px] text-slate-400">Audio saat kuis benar/salah</p>
             </div>
           </div>
@@ -97,7 +102,7 @@ export default function Profil() {
             <span className="font-bold text-slate-700">Platform</span>
           </div>
           <span className="text-[11px] font-mono text-slate-500 font-semibold">
-            HiraKata Mobile v1.0
+            HenHan Go Mobile v1.0
           </span>
         </div>
       </div>

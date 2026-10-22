@@ -200,6 +200,11 @@ export default function Katakana() {
 
   return (
     <section id="katakana-section" className="py-2 px-3 sm:px-4 max-w-md mx-auto space-y-3 sm:space-y-3.5">
+      {/* ================= JUDUL UTAMA ================= */}
+      <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight text-center pt-1">
+        Kuis Flashcard Katakana
+      </h2>
+
       {/* ================= 1. PILIHAN MODE QUIZ DAN TABEL (Paling Atas) ================= */}
       <div className="flex flex-col items-center gap-2 pt-1">
         <div className="inline-flex p-1 rounded-2xl bg-slate-200/80 backdrop-blur-sm soft-inner-shadow">

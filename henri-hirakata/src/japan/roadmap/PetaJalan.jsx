@@ -16,9 +16,9 @@ export default function PetaJalan() {
       desc: 'Fondasi utama membaca kata asli Jepang (104 huruf lengkap).',
       path: '/hiragana',
       icon: 'あ',
-      iconColor: 'bg-indigo-600 text-white',
+      iconColor: 'bg-[#EA4A30] text-white',
       badge: 'Langkah Awal',
-      badgeColor: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      badgeColor: 'bg-rose-50 text-[#EA4A30] border-rose-200',
     },
     {
       step: '2',
@@ -26,9 +26,9 @@ export default function PetaJalan() {
       desc: 'Wajib untuk kata serapan asing, menu makanan, dan nama non-Jepang.',
       path: '/katakana',
       icon: 'ア',
-      iconColor: 'bg-cyan-600 text-white',
+      iconColor: 'bg-amber-500 text-white',
       badge: 'Langkah Kedua',
-      badgeColor: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+      badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
     },
     {
       step: '3',
@@ -46,9 +46,9 @@ export default function PetaJalan() {
       desc: '80 kosakata yang paling sering keluar di lembar soal N5.',
       path: '/kosakata',
       icon: '話',
-      iconColor: 'bg-fuchsia-600 text-white',
+      iconColor: 'bg-rose-600 text-white',
       badge: 'Pilar Keempat',
-      badgeColor: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200',
+      badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
     },
     {
       step: '5',
@@ -66,9 +66,9 @@ export default function PetaJalan() {
       desc: 'Uji kesiapan dengan 15 soal komprehensif standar kelulusan 60%.',
       path: '/latihan',
       icon: '🎯',
-      iconColor: 'bg-amber-500 text-white',
+      iconColor: 'bg-gradient-to-r from-[#EA4A30] to-amber-500 text-white',
       badge: 'Ujian Akhir',
-      badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
+      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
     },
   ];
 
@@ -81,8 +81,8 @@ export default function PetaJalan() {
     <div className="py-4 px-4 max-w-md mx-auto">
       {/* Header */}
       <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold mb-2">
-          <Compass className="w-3.5 h-3.5 text-indigo-500" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-2">
+          <Compass className="w-3.5 h-3.5 text-[#EA4A30]" />
           <span>Kurikulum JLPT N5</span>
         </div>
         <h1 className="text-2xl font-black text-slate-800 tracking-tight">
@@ -94,13 +94,13 @@ export default function PetaJalan() {
       </div>
 
       {/* Timeline Steps */}
-      <div className="space-y-3 relative before:absolute before:inset-0 before:left-5 before:w-0.5 before:bg-indigo-100 before:z-0">
+      <div className="space-y-3 relative before:absolute before:inset-0 before:left-5 before:w-0.5 before:bg-amber-100 before:z-0">
         {steps.map((st, idx) => (
           <motion.div
             key={idx}
             whileTap={{ scale: 0.98 }}
             onClick={() => handleGo(st.path)}
-            className="relative z-10 flex items-start gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 soft-shadow-sm hover:border-indigo-300 transition-all cursor-pointer active:bg-indigo-50/50"
+            className="relative z-10 flex items-start gap-3 p-3.5 rounded-2xl bg-white border border-slate-200/80 soft-shadow-sm hover:border-amber-300 transition-all cursor-pointer active:bg-amber-50/50"
           >
             {/* Step Icon */}
             <div
@@ -130,4 +130,3 @@ export default function PetaJalan() {
     </div>
   );
 }
-

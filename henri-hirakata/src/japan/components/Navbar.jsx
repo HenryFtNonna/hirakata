@@ -12,6 +12,7 @@ import {
   Compass,
 } from 'lucide-react';
 import { setMuted, getMuted, playPopSound } from '../utils/audio';
+import henhanLogo from '../../assets/henhan_logo.jpg';
 
 export default function Navbar() {
   const [audioMuted, setAudioMuted] = useState(getMuted());
@@ -50,20 +51,17 @@ export default function Navbar() {
           onClick={() => playPopSound()}
           className="flex items-center gap-2.5 group cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 text-white flex items-center justify-center font-jp font-black text-xl soft-shadow transition-transform group-hover:scale-105 active:scale-95">
-            あ
+          <div className="w-10 h-10 rounded-2xl overflow-hidden border border-amber-200/80 bg-amber-50 flex items-center justify-center soft-shadow transition-transform group-hover:scale-105 active:scale-95">
+            <img src={henhanLogo} alt="HenHan Go" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-lg sm:text-xl tracking-tight text-slate-800 group-hover:text-indigo-600 transition-colors">
-                HiraKata
-              </span>
-              <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-600 border border-indigo-100">
-                JLPT N5
+              <span className="font-black text-lg sm:text-xl tracking-tight text-slate-800 group-hover:text-[#EA4A30] transition-colors">
+                HenHan Go
               </span>
             </div>
             <p className="text-[10px] text-slate-400 font-medium">
-              Belajar Huruf & Bahasa Jepang
+              Japanese Learning Hub
             </p>
           </div>
         </Link>
@@ -80,16 +78,16 @@ export default function Navbar() {
                 onClick={() => playPopSound()}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   isActive
-                    ? 'bg-white text-indigo-600 shadow-sm font-extrabold'
+                    ? 'bg-white text-[#EA4A30] shadow-sm font-extrabold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-indigo-600' : 'text-slate-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#EA4A30]' : 'text-slate-400'}`} />
                 <span>{item.name}</span>
                 {item.badge && (
                   <span
                     className={`text-[9px] px-1.5 py-0.2 rounded-full font-bold ${
-                      isActive ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-200/80 text-slate-500'
+                      isActive ? 'bg-rose-50 text-[#EA4A30]' : 'bg-slate-200/80 text-slate-500'
                     }`}
                   >
                     {item.badge}
